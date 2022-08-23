@@ -220,7 +220,7 @@ Function PropertyLists_ToStr() As String
         For j = 0 To pkl.Count - 1
             Set pkhe = pkl.Item(j)
             If Not pkhe Is Nothing Then
-                sb.Append pkhe.ToStr
+                sb.AppendLine vbTab & pkhe.ToStr
             End If
         Next
     Next

@@ -147,11 +147,6 @@ Private Sub Form_Resize()
     If W > 0 And H > 0 Then Text1.Move l, t, W, H
 End Sub
 
-Private Sub mnuEditCopyAll_Click()
-    Dim s As String: s = MApp.PropertyLists_ToStr
-    Clipboard.SetText s
-End Sub
-
 ' ############################## ' menu File  ' ############################## '
 Private Sub mnuFileNew_Click()
     MApp.DataClear
@@ -186,6 +181,13 @@ Private Sub mnuFileExit_Click()
     Unload Me
 End Sub
 
+' ############################## ' menu Edit  ' ############################## '
+Private Sub mnuEditCopyAll_Click()
+    Dim s As String: s = MApp.PropertyLists_ToStr
+    Clipboard.SetText s
+End Sub
+
+' ############################## ' menu Help  ' ############################## '
 Private Sub mnuHelpInfo_Click()
     MsgBox App.CompanyName & " " & Me.Caption & vbCrLf & App.FileDescription
 End Sub
