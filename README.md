@@ -10,11 +10,13 @@ Project started in july 2022.
 This is just for reading the file propkey.h and transferring the data to a file with 'tab-separated-value'.  
 In this format it is very easy to read or even copy paste to excel.  
 For this vb-project you need the following files from other projects not contained in this package:  
+  
 Modules:  
  * MErr:    Err_CorrectErrorHandling\Modules\MErr.bas  
  * MPtr:    Ptr_Pointers\Modules\MPtr.bas  
  * MShell:  IO_PathFileName\Modules\MShell.bas  
  * MString: Sys_Strings\Modules\MString.bas  
+  
 Classes:  
  * List:           List_GenericNLinq\Classes\List.cls  
  * OpenFileDialog: Win_Dialogs\Classes\OpenFileDialog.cls  
