@@ -28,14 +28,45 @@ Public Function AutomaticOpenNReadPropKeyHFile(Optional bLoud As Boolean = False
             Exit Function
         End If
     End If
-    AutomaticOpenNReadPropKeyHFile = MApp.ReadFile(PropKeyH)
+    AutomaticOpenNReadPropKeyHFile = MApp.ReadFileH(PropKeyH)
     'Dim s As String
     's = MApp.PropertyLists_ToStr
     'Text1.Text = s
     'Clipboard.SetText s
 End Function
 
-Public Function ReadFile(pfn As PathFileName) As Boolean
+Public Function ReadFileTsvdb(pfn As PathFileName) As Boolean
+    Dim lines() As String
+    If Not pfn.TryReadAllLines(lines) Then
+        MsgBox "Could not read the file: " & vbCrLf & pfn.value
+        Exit Function
+    End If
+    Set PropertyLists = MNew.List(vbObject) 'Of List
+    Dim i As Long, u As Long: u = UBound(lines)
+    Dim line As String
+    Dim pkl As List ': Set pkl = MNew.List(vbObject)
+    Dim pke As PropKeyHEntry
+    For i = 0 To u
+        line = lines(i)
+        Dim data() As String: data = Split(line, vbTab)
+        Dim s As String: s = Left(line, 1)
+        If s = "#" Then
+            'just a comment go on
+        ElseIf s = vbTab Then
+        'If Left(line, 1) = vbTab Then
+            Set pke = MNew.PropKeyHEntry_Parse(data)
+            If Not pkl Is Nothing Then
+                pkl.Add pke
+            End If
+        Else
+            Set pkl = PropertyLists.Add(MNew.List(vbObject))
+            pkl.Name = Trim(line)
+        End If
+    Next
+    ReadFileTsvdb = True
+End Function
+
+Public Function ReadFileH(pfn As PathFileName) As Boolean
     
     Dim lines() As String
     If Not pfn.TryReadAllLines(lines) Then
@@ -43,7 +74,11 @@ Public Function ReadFile(pfn As PathFileName) As Boolean
         Exit Function
     End If
     Set PropertyLists = MNew.List(vbObject) 'Of List
-    ReadFile = ReadLines(lines)
+    ReadFileH = ReadLines(lines)
+    
+End Function
+
+Public Function ReadTsvdb(lines() As String) As Boolean
     
 End Function
 

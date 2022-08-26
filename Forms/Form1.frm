@@ -91,15 +91,16 @@ Option Explicit
 
 'For this project you need the following files not contained in this package:
 'Modules:
-' * Err_CorrectErrorHandling\Modules\MErr.bas
-' * Ptr_Pointers\Modules\MPtr.bas
-' * IO_PathFileName\Modules\MShell.bas
-' * Sys_Strings\Modules\MString.bas
+' * MErr:    Err_CorrectErrorHandling\Modules\MErr.bas
+' * MPtr:    Ptr_Pointers\Modules\MPtr.bas
+' * MShell:  IO_PathFileName\Modules\MShell.bas
+' * MString: Sys_Strings\Modules\MString.bas
 'Classes:
-' * List_GenericNLinq\Classes\List.cls
-' * Win_Dialogs\Classes\OpenFileDialog.cls
-' * IO_PathFileName\Classes\PathFileName.cls
-' * Sys_StringBuilder\Classes\StringBuilder.cls
+' * List:           List_GenericNLinq\Classes\List.cls
+' * OpenFileDialog: Win_Dialogs\Classes\OpenFileDialog.cls
+' * PathFileName:   IO_PathFileName\Classes\PathFileName.cls
+' * SaveFileDialog: Win_Dialogs\Classes\SaveFileDialog.cls
+' * StringBuilder:  Sys_StringBuilder\Classes\StringBuilder.cls
 
 Private m_FirstActivate As Boolean
 
@@ -137,14 +138,14 @@ Private Sub List1_Click()
 End Sub
 
 Private Sub Form_Resize()
-    Dim l As Single: l = 0
+    Dim L As Single: L = 0
     Dim t As Single: t = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = Me.ScaleHeight - t
-    If W > 0 And H > 0 Then List1.Move l, t, W, H
-    l = W
-    W = Me.ScaleWidth - l
-    If W > 0 And H > 0 Then Text1.Move l, t, W, H
+    If W > 0 And H > 0 Then List1.Move L, t, W, H
+    L = W
+    W = Me.ScaleWidth - L
+    If W > 0 And H > 0 Then Text1.Move L, t, W, H
 End Sub
 
 ' ############################## ' menu File  ' ############################## '
@@ -157,17 +158,24 @@ Private Sub mnuFileOpen_Click()
     Dim OFD As OpenFileDialog: Set OFD = New OpenFileDialog
     With OFD
         .InitialDirectory = App.Path
-        .Filter = "Header-Files (*.h)|*.h"
+        .Filter = "Header-Files (*.h)|*.h|Tab sepated values (*.tsvdb)|*.tsvdb"
         If .ShowDialog() = vbCancel Then Exit Sub
-        Dim PropKeyH As PathFileName: Set PropKeyH = MNew.PathFileName(OFD.FileName)
-        MApp.ReadFile PropKeyH
-        Me.UpdateView 'MApp.PropertyLists
+        Dim PropKeyH As PathFileName: Set PropKeyH = MNew.PathFileName(.FileName)
     End With
+    Dim bOK As Boolean
+    If PropKeyH.Extension = ".h" Then
+        bOK = MApp.ReadFileH(PropKeyH)
+    ElseIf PropKeyH.Extension = ".tsvdb" Then
+        bOK = MApp.ReadFileTsvdb(PropKeyH)
+    End If
+    If bOK Then Me.UpdateView: Exit Sub
+    MsgBox "Could not read the file: " & vbCrLf & PropKeyH.value
 End Sub
 
 Private Sub mnuFileSaveAs_Click()
     Dim SFD As SaveFileDialog: Set SFD = New SaveFileDialog
     With SFD
+        .AddExtension = True
         .InitialDirectory = App.Path
         .Filter = "Tab separated values (*.tsvdb)|*.tsvdb"
         If .ShowDialog = vbCancel Then Exit Sub

@@ -1,3 +1,4 @@
+#File with data in the format of "Tab separated values" select all text, copy to clipboard and paste it in excel
 Audio properties
 	System.Audio.ChannelCount	PKEY_Audio_ChannelCount	UInt32	VT_UI4	FMTID_AudioSummaryInformation	64440490-4C8B-11D1-8B70-080036B11A03	PIDASI_CHANNEL_COUNT	7	Indicates the channel count for the audio file.  Values: 1 (mono), 2 (stereo).
 	System.Audio.Compression	PKEY_Audio_Compression	String	VT_LPWSTR  (For variants: VT_BSTR)	FMTID_AudioSummaryInformation	64440490-4C8B-11D1-8B70-080036B11A03	PIDASI_COMPRESSION	10	
