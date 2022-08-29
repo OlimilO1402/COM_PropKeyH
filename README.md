@@ -7,8 +7,9 @@
 [![Follow](https://img.shields.io/github/followers/OlimilO1402.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/OlimilO1402/COM_PropKeyH/watchers)
 
 Project started in july 2022.  
-This is just for reading and parsing the file propkey.h and transferring the data to a file with 'tab-separated-values'.  
-In this format the data is very easy to read or even copy/paste to a excel-sheet.  
+This project is for reading and parsing the file propkey.h. This file contains all propertykeys for reading file properties of different file types by implementing the IPropertyStore interface (->will come soon).  
+This is not for generally reading/parsing of c-style header-files. The reading mechanism is held simple because the propkey.h has a simple format.  
+After reading the propkey.h the data can be transfered to a file with 'tab-separated-values'. In this format the data is very easy to read or even copy/paste to a excel-sheet.  
 For this vb-project you need the following files from other projects not contained in this package:  
   
 Modules:  
