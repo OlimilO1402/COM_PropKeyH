@@ -51,6 +51,24 @@ Public Descript As String ' Indicates the channel count for the audio file. Valu
 '//  Indicates the average data rate in Hz for the audio file in "bits per second".
 'DEFINE_PROPERTYKEY(PKEY_Audio_EncodingBitrate, 0x64440490, 0x4C8B, 0x11D1, 0x8B, 0x70, 0x08, 0x00, 0x36, 0xB1, 0x1A, 0x03, 4);
 
+'Public Function PropKeyHEntry_Parse(data() As String) As PropKeyHEntry
+'    Dim i As Long, u As Long: u = UBound(data)
+'    Dim pke As PropKeyHEntry: Set pke = New PropKeyHEntry
+'    With pke
+'        i = i + 1 'the first column is empty, because it contains the name of the group of entries
+'        If i <= u Then .Name = data(i): i = i + 1 ' System.Audio.ChannelCount
+'        If i <= u Then .PKEYName = data(i): i = i + 1  ' PKEY_Audio_ChannelCount
+'        If i <= u Then .DataType = data(i): i = i + 1  ' UInt32
+'        If i <= u Then .PKVarTyp = data(i): i = i + 1  ' VT_UI4
+'        If i <= u Then .FormatID = data(i): i = i + 1  ' FMTID_AudioSummaryInformation
+'        If i <= u Then .FmtGuid = data(i): i = i + 1   ' 64440490-4C8B-11D1-8B70-080036B11A03
+'        If i <= u Then .PIDName = data(i): i = i + 1   ' PIDASI_CHANNEL_COUNT
+'        If i <= u Then .PIDValue = data(i): i = i + 1  ' 7
+'        If i <= u Then .Descript = data(i): i = i + 1  ' Indicates the channel count for the audio file. Values: 1 (mono), 2 (stereo).
+'    End With
+'    Set PropKeyHEntry_Parse = pke
+'End Function
+
 Friend Function ToStr() As String
     ToStr = Name & vbTab & _
             PKEYName & vbTab & _
