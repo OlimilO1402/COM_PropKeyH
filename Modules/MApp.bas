@@ -2,6 +2,7 @@ Attribute VB_Name = "MApp"
 Option Explicit
 'Public PropKeyH As PathFileName
 Public PropertyLists As List '(Of List (Of PropKeyHEntry))
+Public TsvbdPFN As PathFileName
 
 Sub Main()
 '    If AutomaticOpenNReadPropKeyHFile(True) Then
@@ -13,6 +14,10 @@ End Sub
 Sub DataClear()
     Set PropertyLists = MNew.List(vbObject)
 End Sub
+
+Public Function Max(v1, v2)
+    If v1 > v2 Then Max = v1 Else Max = v2
+End Function
 
 Public Function AutomaticOpenNReadPropKeyHFile(Optional bLoud As Boolean = False) As Boolean
     Dim PropKeyH As PathFileName
@@ -38,7 +43,7 @@ End Function
 Public Function ReadFileTsvdb(pfn As PathFileName) As Boolean
     Dim lines() As String
     If Not pfn.TryReadAllLines(lines) Then
-        MsgBox "Could not read the file: " & vbCrLf & pfn.value
+        MsgBox "Could not read the file: " & vbCrLf & pfn.Value
         Exit Function
     End If
     Set PropertyLists = MNew.List(vbObject) 'Of List
@@ -63,24 +68,13 @@ Public Function ReadFileTsvdb(pfn As PathFileName) As Boolean
             pkl.Name = Trim(line)
         End If
     Next
+    Set TsvbdPFN = pfn
     ReadFileTsvdb = True
 End Function
-
-Public Function ReadFileH(pfn As PathFileName) As Boolean
-    
-    Dim lines() As String
-    If Not pfn.TryReadAllLines(lines) Then
-        MsgBox "Could not read the file: " & vbCrLf & pfn.value
-        Exit Function
-    End If
-    Set PropertyLists = MNew.List(vbObject) 'Of List
-    ReadFileH = ReadLines(lines)
-    
-End Function
-
-Public Function ReadTsvdb(lines() As String) As Boolean
-    
-End Function
+'
+'Public Function ReadTsvdb(lines() As String) As Boolean
+'    '
+'End Function
 
 Public Function WriteTSVDB(tsvdb As PathFileName) As Boolean
     'If Not tsvdb.Exists Then Exit Function
@@ -88,8 +82,20 @@ Try: On Error GoTo Catch
     tsvdb.WriteStr PropertyLists_ToStr
     GoTo Finally
 Catch:
-    MErr.MessError "MApp", "WriteTSVDB", "Could not write to file: " & vbCrLf & tsvdb.value
+    MErr.MessError "MApp", "WriteTSVDB", "Could not write to file: " & vbCrLf & tsvdb.Value
 Finally:
+End Function
+
+Public Function ReadFileH(pfn As PathFileName) As Boolean
+    
+    Dim lines() As String
+    If Not pfn.TryReadAllLines(lines) Then
+        MsgBox "Could not read the file: " & vbCrLf & pfn.Value
+        Exit Function
+    End If
+    Set PropertyLists = MNew.List(vbObject) 'Of List
+    ReadFileH = ReadLines(lines)
+    
 End Function
 
 Public Function ReadLines(lines() As String) As Boolean
@@ -275,4 +281,24 @@ Public Function PropertyList_ToStr(pkl As List) As String
     Next
     'PropertyList_ToStr = sb.ToStr
     PropertyList_ToStr = s
+End Function
+
+Public Function StatsAllDifDatatypes() As List
+    Dim datatypes As List: Set datatypes = MNew.List(vbObject, , True)
+    Dim i As Long, pkl As List
+    For i = 0 To PropertyLists.Count - 1
+        Set pkl = PropertyLists.Item(i)
+        Dim j As Long, pkhe As PropKeyHEntry
+        Dim dtyp As String
+        For j = 0 To pkl.Count - 1
+            Set pkhe = pkl.Item(j)
+            If Not pkhe Is Nothing Then
+                dtyp = pkhe.DataType & " " & pkhe.PKVarTyp
+                If Not datatypes.ContainsKey(dtyp) Then
+                    datatypes.Add pkhe, dtyp
+                End If
+            End If
+        Next
+    Next
+    Set StatsAllDifDatatypes = datatypes
 End Function

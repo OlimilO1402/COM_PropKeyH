@@ -21,12 +21,12 @@ Begin VB.Form FMain
          Strikethrough   =   0   'False
       EndProperty
       Height          =   7935
-      Left            =   3120
+      Left            =   3600
       MultiLine       =   -1  'True
       ScrollBars      =   3  'Beides
       TabIndex        =   0
       Top             =   0
-      Width           =   11295
+      Width           =   9975
    End
    Begin VB.ListBox List1 
       BeginProperty Font 
@@ -44,7 +44,7 @@ Begin VB.Form FMain
       List            =   "Form1.frx":1784
       TabIndex        =   1
       Top             =   0
-      Width           =   3135
+      Width           =   3495
    End
    Begin VB.Menu mnuFile 
       Caption         =   "File"
@@ -52,27 +52,35 @@ Begin VB.Form FMain
          Caption         =   "New"
          Shortcut        =   ^N
       End
-      Begin VB.Menu mnuFileOpen 
-         Caption         =   "Open propkey.h"
+      Begin VB.Menu mnuFileopen 
+         Caption         =   "Open..."
          Shortcut        =   ^O
+      End
+      Begin VB.Menu mnuFileSave 
+         Caption         =   "Save"
+         Shortcut        =   ^S
       End
       Begin VB.Menu mnuFileSaveAs 
          Caption         =   "Save As..."
-         Shortcut        =   ^S
+         Shortcut        =   ^A
       End
       Begin VB.Menu mnuFileSep1 
          Caption         =   "-"
       End
       Begin VB.Menu mnuFileExit 
-         Caption         =   "E&xit"
-         Shortcut        =   ^X
+         Caption         =   "&Exit"
+         Shortcut        =   ^E
       End
    End
    Begin VB.Menu mnuEdit 
       Caption         =   "Edit"
+      Begin VB.Menu mnuEditStatAllDifDatatypes 
+         Caption         =   "Stats all diff. datatypes"
+         Shortcut        =   ^D
+      End
       Begin VB.Menu mnuEditCopyAll 
          Caption         =   "Copy All for Excel-Import"
-         Shortcut        =   ^C
+         Shortcut        =   ^I
       End
    End
    Begin VB.Menu mnuHelp 
@@ -138,14 +146,14 @@ Private Sub List1_Click()
 End Sub
 
 Private Sub Form_Resize()
-    Dim L As Single: L = 0
+    Dim l As Single: l = 0
     Dim t As Single: t = List1.Top
     Dim W As Single: W = List1.Width
     Dim H As Single: H = Me.ScaleHeight - t
-    If W > 0 And H > 0 Then List1.Move L, t, W, H
-    L = W
-    W = Me.ScaleWidth - L
-    If W > 0 And H > 0 Then Text1.Move L, t, W, H
+    If W > 0 And H > 0 Then List1.Move l, t, W, H
+    l = W
+    W = Me.ScaleWidth - l
+    If W > 0 And H > 0 Then Text1.Move l, t, W, H
 End Sub
 
 ' ############################## ' menu File  ' ############################## '
@@ -169,7 +177,19 @@ Private Sub mnuFileOpen_Click()
         bOK = MApp.ReadFileTsvdb(PropKeyH)
     End If
     If bOK Then Me.UpdateView: Exit Sub
-    MsgBox "Could not read the file: " & vbCrLf & PropKeyH.value
+    MsgBox "Could not read the file: " & vbCrLf & PropKeyH.Value
+End Sub
+
+Private Sub mnuFileSave_Click()
+    If MApp.TsvbdPFN Is Nothing Then
+        mnuFileSaveAs_Click
+        Exit Sub
+    End If
+    If Not MApp.TsvbdPFN.Exists Then
+        mnuFileSaveAs_Click
+        Exit Sub
+    End If
+    MApp.WriteTSVDB MApp.TsvbdPFN
 End Sub
 
 Private Sub mnuFileSaveAs_Click()
@@ -190,6 +210,31 @@ Private Sub mnuFileExit_Click()
 End Sub
 
 ' ############################## ' menu Edit  ' ############################## '
+Private Sub mnuEditStatAllDifDatatypes_Click()
+    Dim datatypes As List: Set datatypes = MApp.StatsAllDifDatatypes
+    If datatypes Is Nothing Then
+        MsgBox "Error: creating stats failed"
+        Exit Sub
+    End If
+    Dim w1 As Long, w2 As Long, w3 As Long
+    Dim s0 As String, s As String
+    Dim i As Long, pkhe As PropKeyHEntry
+    For i = 0 To datatypes.Count - 1
+        Set pkhe = datatypes.Item(i)
+        w1 = Max(w1, Len(pkhe.Name))
+        w2 = Max(w2, Len(pkhe.DataType))
+        'w3 = Max(w3, Len(pkhe.PKVarTyp))
+        's0 = pkhe.Name & " || " & pkhe.DataType & " :: " & pkhe.PKVarTyp
+        's = s & s0 & vbCrLf
+    Next
+    For i = 0 To datatypes.Count - 1
+        Set pkhe = datatypes.Item(i)
+        s0 = PadRight(pkhe.Name, w1) & " || " & PadRight(pkhe.DataType, w2) & " :: " & pkhe.PKVarTyp 'PadRight(pkhe.PKVarTyp, w3)
+        s = s & s0 & vbCrLf
+    Next
+    Text1.Text = s
+End Sub
+
 Private Sub mnuEditCopyAll_Click()
     Dim s As String: s = MApp.PropertyLists_ToStr
     Clipboard.SetText s
@@ -197,5 +242,5 @@ End Sub
 
 ' ############################## ' menu Help  ' ############################## '
 Private Sub mnuHelpInfo_Click()
-    MsgBox App.CompanyName & " " & Me.Caption & vbCrLf & App.FileDescription
+    MsgBox App.CompanyName & " " & Me.Caption & vbCrLf & App.FileDescription '& vbCrLf & " v" & App.Major & "." & App.Minor & "." & App.Revision
 End Sub

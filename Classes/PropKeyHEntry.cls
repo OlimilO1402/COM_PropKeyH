@@ -68,6 +68,9 @@ Public Descript As String ' Indicates the channel count for the audio file. Valu
 '    End With
 '    Set PropKeyHEntry_Parse = pke
 'End Function
+'Public Function key() As String
+'    key = DataType & " " & PKVarTyp
+'End Function
 
 Friend Function ToStr() As String
     ToStr = Name & vbTab & _
@@ -80,3 +83,4 @@ Friend Function ToStr() As String
             PIDValue & vbTab & _
             Descript '& vbCrLf
 End Function
+
