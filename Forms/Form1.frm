@@ -119,7 +119,7 @@ End Sub
 '
 Private Sub Form_Activate()
     If m_FirstActivate Then
-        If AutomaticOpenNReadPropKeyHFile(True) Then
+        If MApp.AutomaticOpenNReadPropKeyHFile(True) Then
             UpdateView
         End If
     End If
@@ -131,8 +131,9 @@ Public Sub UpdateView() 'pkl As List)
     Text1.Text = vbNullChar
     Dim i As Long, le As List
     'For Each le In MApp.PropertyLists.GetEnumerator
-    For i = 0 To MApp.PropertyLists.Count - 1
-        Set le = MApp.PropertyLists.Item(i)
+    Dim PLists As List: Set PLists = MApp.PropertyLists
+    For i = 0 To PLists.Count - 1
+        Set le = PLists.Item(i)
         List1.AddItem le.Name
     Next
     If List1.ListCount > 0 Then List1.ListIndex = 0
@@ -168,28 +169,19 @@ Private Sub mnuFileOpen_Click()
         .InitialDirectory = App.Path
         .Filter = "Header-Files (*.h)|*.h|Tab sepated values (*.tsvdb)|*.tsvdb"
         If .ShowDialog() = vbCancel Then Exit Sub
-        Dim PropKeyH As PathFileName: Set PropKeyH = MNew.PathFileName(.FileName)
+        Dim aFile As PathFileName: Set aFile = MNew.PathFileName(.FileName)
     End With
-    Dim bOK As Boolean
-    If PropKeyH.Extension = ".h" Then
-        bOK = MApp.ReadFileH(PropKeyH)
-    ElseIf PropKeyH.Extension = ".tsvdb" Then
-        bOK = MApp.ReadFileTsvdb(PropKeyH)
-    End If
+    Dim bOK As Boolean: bOK = MApp.ReadFile(aFile)
     If bOK Then Me.UpdateView: Exit Sub
-    MsgBox "Could not read the file: " & vbCrLf & PropKeyH.Value
+    MsgBox "Could not read the file: " & vbCrLf & aFile.Value
 End Sub
 
 Private Sub mnuFileSave_Click()
-    If MApp.TsvbdPFN Is Nothing Then
+    If LCase(MApp.DocumentTsv.FileName.Extension) = ".h" Then
         mnuFileSaveAs_Click
-        Exit Sub
+    Else
+        MApp.WriteFile MApp.DocumentTsv.FileName
     End If
-    If Not MApp.TsvbdPFN.Exists Then
-        mnuFileSaveAs_Click
-        Exit Sub
-    End If
-    MApp.WriteTSVDB MApp.TsvbdPFN
 End Sub
 
 Private Sub mnuFileSaveAs_Click()
@@ -200,8 +192,9 @@ Private Sub mnuFileSaveAs_Click()
         .Filter = "Tab separated values (*.tsvdb)|*.tsvdb"
         If .ShowDialog = vbCancel Then Exit Sub
         Dim tsvdb As PathFileName: Set tsvdb = MNew.PathFileName(SFD.FileName)
-        If LCase(tsvdb.Extension) <> ".tsvdb" Then tsvdb.Extension = "tsvdb"
-        MApp.WriteTSVDB tsvdb
+        If Not MApp.WriteFile(tsvdb) Then
+            
+        End If
     End With
 End Sub
 
@@ -223,9 +216,6 @@ Private Sub mnuEditStatAllDifDatatypes_Click()
         Set pkhe = datatypes.Item(i)
         w1 = Max(w1, Len(pkhe.Name))
         w2 = Max(w2, Len(pkhe.DataType))
-        'w3 = Max(w3, Len(pkhe.PKVarTyp))
-        's0 = pkhe.Name & " || " & pkhe.DataType & " :: " & pkhe.PKVarTyp
-        's = s & s0 & vbCrLf
     Next
     For i = 0 To datatypes.Count - 1
         Set pkhe = datatypes.Item(i)
@@ -236,8 +226,7 @@ Private Sub mnuEditStatAllDifDatatypes_Click()
 End Sub
 
 Private Sub mnuEditCopyAll_Click()
-    Dim s As String: s = MApp.PropertyLists_ToStr
-    Clipboard.SetText s
+    MApp.ClipboardCopyAll
 End Sub
 
 ' ############################## ' menu Help  ' ############################## '

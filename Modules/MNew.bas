@@ -33,3 +33,17 @@ Public Function PropKeyHEntry_Parse(data() As String) As PropKeyHEntry
     End With
     Set PropKeyHEntry_Parse = pke
 End Function
+
+'Public Function DocumentPkh(aPFN As PathFileName, Optional ByVal aPropertyLists As List = Nothing) As DocumentPkh
+'    Set DocumentPkh = New DocumentPkh: DocumentPkh.New_ aPFN, aPropertyLists
+'End Function
+
+Public Function DocumentTsv(aPFN As PathFileName, Optional ByVal aPropertyLists As List = Nothing) As DocumentTsv
+    Set DocumentTsv = New DocumentTsv: DocumentTsv.New_ aPFN, aPropertyLists
+End Function
+
+'Public Function DocumentTsvPL(ByVal aPropertyLists As List) As DocumentTsv
+'    Set DocumentTsv = New DocumentTsv: DocumentTsv.NewPL aPropertyLists
+'End Function
+
+
