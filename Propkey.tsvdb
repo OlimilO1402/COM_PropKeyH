@@ -1046,3 +1046,4 @@ Volume properties
 	System.Volume.IsMappedDrive	PKEY_Volume_IsMappedDrive	Boolean	VT_BOOL		{149C0B69-2C2D-48FC-808F-D318D78C4636}		2	
 	System.Volume.IsRoot	PKEY_Volume_IsRoot	Boolean	VT_BOOL	FMTID_Volume	{9B174B35-40FF-11D2-A27E-00C04FC30871}	Filesystem Volume Properties	10	
 Deprecated property key names
+

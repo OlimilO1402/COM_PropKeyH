@@ -126,15 +126,19 @@ Private Sub Form_Activate()
     m_FirstActivate = False
 End Sub
 
-Public Sub UpdateView() 'pkl As List)
+Public Sub UpdateCaption()
+    Me.Caption = "PropKeyHReader v" & App.Major & "." & App.Minor & "." & App.Revision & " - " & MApp.DocumentTsv.FileName.Value
+End Sub
+
+Public Sub UpdateView()
+    UpdateCaption
     List1.Clear
     Text1.Text = vbNullChar
     Dim i As Long, le As List
-    'For Each le In MApp.PropertyLists.GetEnumerator
     Dim PLists As List: Set PLists = MApp.PropertyLists
     For i = 0 To PLists.Count - 1
         Set le = PLists.Item(i)
-        List1.AddItem le.Name
+        List1.AddItem le.Name & "(" & le.Count & ")"
     Next
     If List1.ListCount > 0 Then List1.ListIndex = 0
 End Sub
@@ -181,6 +185,7 @@ Private Sub mnuFileSave_Click()
         mnuFileSaveAs_Click
     Else
         MApp.WriteFile MApp.DocumentTsv.FileName
+        UpdateView
     End If
 End Sub
 
@@ -193,8 +198,9 @@ Private Sub mnuFileSaveAs_Click()
         If .ShowDialog = vbCancel Then Exit Sub
         Dim tsvdb As PathFileName: Set tsvdb = MNew.PathFileName(SFD.FileName)
         If Not MApp.WriteFile(tsvdb) Then
-            
+            MsgBox "Error writing file: " & vbCrLf & tsvdb.Value
         End If
+        UpdateView
     End With
 End Sub
 
@@ -219,7 +225,7 @@ Private Sub mnuEditStatAllDifDatatypes_Click()
     Next
     For i = 0 To datatypes.Count - 1
         Set pkhe = datatypes.Item(i)
-        s0 = PadRight(pkhe.Name, w1) & " || " & PadRight(pkhe.DataType, w2) & " :: " & pkhe.PKVarTyp 'PadRight(pkhe.PKVarTyp, w3)
+        s0 = PadRight(pkhe.Name, w1) & " || " & PadRight(pkhe.DataType, w2) & " :: " & pkhe.PKVarTyp
         s = s & s0 & vbCrLf
     Next
     Text1.Text = s

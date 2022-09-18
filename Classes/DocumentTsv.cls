@@ -17,7 +17,6 @@ Private m_PropertyLists As List '(Of List(Of PropKeyHEntry))
 
 Friend Sub New_(aPFN As PathFileName, Optional ByVal aPropertyLists As List = Nothing)
     Set m_PFN = aPFN: Set m_PropertyLists = aPropertyLists
-    'If UCase(m_PFN.Extension) <> "tsvdb" Then m_PFN.Extension = "tsvDB"
 End Sub
 
 Public Property Get FileName() As PathFileName
@@ -51,7 +50,7 @@ Try: On Error GoTo Catch
         If s = "#" Then
             'just a comment go on
         ElseIf s = vbTab Then
-            Set pke = MNew.PropKeyHEntry_Parse(data)
+            Set pke = MParserPkh.PropKeyHEntry_ParseFromTsvDB(data)
             If Not pkl Is Nothing Then
                 pkl.Add pke
             End If
