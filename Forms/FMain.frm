@@ -5,8 +5,8 @@ Begin VB.Form FMain
    ClientLeft      =   225
    ClientTop       =   870
    ClientWidth     =   14535
-   Icon            =   "Form1.frx":0000
-   LinkTopic       =   "Form1"
+   Icon            =   "FMain.frx":0000
+   LinkTopic       =   "FMain"
    ScaleHeight     =   8655
    ScaleWidth      =   14535
    StartUpPosition =   3  'Windows-Standard
@@ -39,9 +39,9 @@ Begin VB.Form FMain
          Strikethrough   =   0   'False
       EndProperty
       Height          =   7710
-      ItemData        =   "Form1.frx":1782
+      ItemData        =   "FMain.frx":1782
       Left            =   0
-      List            =   "Form1.frx":1784
+      List            =   "FMain.frx":1784
       TabIndex        =   1
       Top             =   0
       Width           =   3495
