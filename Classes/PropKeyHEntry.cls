@@ -63,3 +63,105 @@ Friend Function ToStr() As String
             Descript '& vbCrLf
 End Function
 
+'Byte              :: VT_UI1
+'Int16             :: VT_I2
+'Int32             :: VT_I4
+'UInt16            :: VT_UI2
+'UInt32            :: VT_UI4
+'UInt64            :: VT_UI8
+'Boolean           :: VT_BOOL
+'Stream            :: VT_STREAM
+'Blob              :: VT_BLOB
+'Guid              :: VT_CLSID
+'Null              :: VT_NULL
+'Object            :: VT_UNKNOWN
+'Clipboard         :: VT_CF
+'Double            :: VT_R8
+'DateTime          :: VT_FILETIME                (For variants: VT_DATE            )
+
+'Any               :: VT_NULL                                                         Legacy code may treat this as VT_UNKNOWN.
+'Buffer            :: VT_VECTOR | VT_UI1         (For variants: VT_ARRAY | VT_UI1  )
+'String            :: VT_LPWSTR                  (For variants: VT_BSTR            )  Legacy code may treat this as VT_LPSTR.
+'String            :: VT_LPWSTR                  (For variants: VT_BSTR            )
+'String            :: VT_LPWSTR                  (For variants: VT_BSTR            )  Legacy code may treat this as VT_BSTR.
+'Multivalue String :: VT_VECTOR | VT_LPWSTR      (For variants: VT_ARRAY | VT_BSTR )
+'Multivalue UInt64 :: VT_VECTOR | VT_UI8         (For variants: VT_ARRAY | VT_UI8  )
+'Multivalue String :: VT_VECTOR | VT_LPWSTR      (For variants: VT_ARRAY | VT_BSTR )  Legacy code may treat this as VT_LPSTR.
+'Multivalue Guid   :: VT_VECTOR | VT_CLSID       (For variants: VT_ARRAY | VT_CLSID)
+'Multivalue Double :: VT_VECTOR | VT_R8          (For variants: VT_ARRAY | VT_R8   )
+'Multivalue UInt32 :: VT_VECTOR | VT_UI4         (For variants: VT_ARRAY | VT_UI4  )
+'Multivalue Any    :: VT_VECTOR | VT_NULL        (For variants: VT_ARRAY | VT_NULL )
+
+Public Property Get EVbVarType() As EVbVarType
+    'Dim vt As EVbVarType
+    'If CheckEVbVarType(vt) Then EVbVarType = vt
+    EVbVarType = MEVbVarType.EVbVarType_Parse(DataType)
+End Property
+
+Private Function CheckEVbVarType(vt_out As EVbVarType) As Boolean
+    Dim vt0 As EVbVarType: vt0 = DataTypeToEVbVarType
+    Dim vt1 As EVbVarType: vt1 = PKVarTypToEVbVarType
+    CheckEVbVarType = vt0 = vt1
+    vt_out = vt0
+End Function
+
+Private Function DataTypeToEVbVarType() As EVbVarType
+    DataTypeToEVbVarType = MEVbVarType.EVbVarType_Parse(DataType)
+End Function
+
+Private Function PKVarTypToEVbVarType() As EVbVarType
+    Dim s As String: s = Trim(PKVarTyp)
+    Dim vt As EVbVarType
+    vt = MEVbVarType.EVbVarType_Parse(s)
+    If vt <> vbEmpty Then PKVarTypToEVbVarType = vt: Exit Function
+    Dim sa() As String: sa = Split(PKVarTyp, " ")
+    Dim i As Long, u As Long: u = UBound(sa)
+    
+    'i = 0
+    If i > u Then PKVarTypToEVbVarType = vt: Exit Function
+    vt = vt Or MEVbVarType.EVbVarType_Parse(sa(i))
+    
+    i = i + 1
+    If i > u Then PKVarTypToEVbVarType = vt: Exit Function
+    If sa(i) = "|" Then
+    
+        i = i + 1
+        If i > u Then PKVarTypToEVbVarType = vt: Exit Function
+        vt = vt Or MEVbVarType.EVbVarType_Parse(sa(i))
+        Exit Function
+        
+    End If
+    
+    i = i + 1
+    If i > u Then PKVarTypToEVbVarType = vt: Exit Function
+    If sa(i) = "(For" Then
+    
+        i = i + 1
+        If i > u Then PKVarTypToEVbVarType = vt: Exit Function
+        If sa(i) = "variants:" Then
+            vt = vt Or MEVbVarType.EVbVarType_Parse(sa(i))
+        End If
+        
+        i = i + 1
+        If i > u Then PKVarTypToEVbVarType = vt: Exit Function
+        If sa(i) = "|" Then
+        
+            i = i + 1
+            If i > u Then PKVarTypToEVbVarType = vt: Exit Function
+            vt = vt Or MEVbVarType.EVbVarType_Parse(sa(i))
+            Exit Function
+            
+        End If
+    
+    End If
+
+End Function
+
+'Public Function ToVVariant() As VVariant
+'    Dim vt As EVbVarType: vt = MEVbVarType.EVbVarType_Parse(Me.PKVarTyp)
+'    Set ToVVariant = MNew.VVariantVt(vt)
+'End Function
+'
+'Public Function ToPossFileProperty() As FileProperty
+'    Set ToPossFileProperty = MNew.FileProperty(Me.ToPropKey, Me.ToVVariant)
+'End Function

@@ -6,7 +6,7 @@ Sub Main()
     FMain.Show
 End Sub
 
-Public Property Get PropertyLists() As List
+Public Property Get PropertyLists() As List '(Of List(Of PropKeyHEntry))
     Set PropertyLists = m_DocumentTsv.PropertyLists
 End Property
 
@@ -150,7 +150,7 @@ Public Function PropertyList_ToStr(pkl As List) As String
 End Function
 
 Public Function StatsAllDifDatatypes() As List
-    Dim datatypes As List: Set datatypes = MNew.List(vbObject, , True)
+    Dim datatypes As List: Set datatypes = MNew.List(EDataType.vbObject, , True)
     Dim i As Long, pkl As List
     For i = 0 To PropertyLists.Count - 1
         Set pkl = PropertyLists.Item(i)

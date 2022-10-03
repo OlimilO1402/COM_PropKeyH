@@ -132,8 +132,8 @@ End Sub
 
 Public Sub UpdateView()
     UpdateCaption
-    List1.Clear
     Text1.Text = vbNullChar
+    List1.Clear
     Dim i As Long, le As List
     Dim PLists As List: Set PLists = MApp.PropertyLists
     For i = 0 To PLists.Count - 1
@@ -151,14 +151,14 @@ Private Sub List1_Click()
 End Sub
 
 Private Sub Form_Resize()
-    Dim l As Single: l = 0
-    Dim t As Single: t = List1.Top
+    Dim L As Single: L = 0
+    Dim T As Single: T = List1.Top
     Dim W As Single: W = List1.Width
-    Dim H As Single: H = Me.ScaleHeight - t
-    If W > 0 And H > 0 Then List1.Move l, t, W, H
-    l = W
-    W = Me.ScaleWidth - l
-    If W > 0 And H > 0 Then Text1.Move l, t, W, H
+    Dim H As Single: H = Me.ScaleHeight - T
+    If W > 0 And H > 0 Then List1.Move L, T, W, H
+    L = W
+    W = Me.ScaleWidth - L
+    If W > 0 And H > 0 Then Text1.Move L, T, W, H
 End Sub
 
 ' ############################## ' menu File  ' ############################## '
@@ -212,7 +212,7 @@ End Sub
 Private Sub mnuEditStatAllDifDatatypes_Click()
     Dim datatypes As List: Set datatypes = MApp.StatsAllDifDatatypes
     If datatypes Is Nothing Then
-        MsgBox "Error: creating stats failed"
+        MsgBox "Error: failed to create statistics failed"
         Exit Sub
     End If
     Dim w1 As Long, w2 As Long, w3 As Long
@@ -229,6 +229,8 @@ Private Sub mnuEditStatAllDifDatatypes_Click()
         s = s & s0 & vbCrLf
     Next
     Text1.Text = s
+    
+    
 End Sub
 
 Private Sub mnuEditCopyAll_Click()
