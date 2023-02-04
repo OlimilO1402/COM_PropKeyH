@@ -62,7 +62,6 @@ Begin VB.Form FMain
       End
       Begin VB.Menu mnuFileSaveAs 
          Caption         =   "Save As..."
-         Shortcut        =   ^A
       End
       Begin VB.Menu mnuFileSep1 
          Caption         =   "-"
@@ -81,6 +80,21 @@ Begin VB.Form FMain
       Begin VB.Menu mnuEditCopyAll 
          Caption         =   "Copy All for Excel-Import"
          Shortcut        =   ^I
+      End
+      Begin VB.Menu mnuEditCreateVBEnum 
+         Caption         =   "Create VB-Enum"
+      End
+      Begin VB.Menu mnuEditCreateSubInit 
+         Caption         =   "Create Sub Init()"
+         Begin VB.Menu mnuEditCreateSubInit1 
+            Caption         =   "Part 1"
+         End
+         Begin VB.Menu mnuEditCreateSubInit2 
+            Caption         =   "Part 2"
+         End
+         Begin VB.Menu mnuEditCreateSubInit3 
+            Caption         =   "Part 3"
+         End
       End
    End
    Begin VB.Menu mnuHelp 
@@ -229,12 +243,28 @@ Private Sub mnuEditStatAllDifDatatypes_Click()
         s = s & s0 & vbCrLf
     Next
     Text1.Text = s
-    
-    
+        
 End Sub
 
 Private Sub mnuEditCopyAll_Click()
     MApp.ClipboardCopyAll
+End Sub
+
+Private Sub mnuEditCreateVBEnum_Click()
+    Text1.Text = MApp.DocumentTsv.ToModuleEnum
+End Sub
+
+Private Sub mnuEditCreateSubInit1_Click()
+    'just because a VB.TextBox is not capable to hold so much text
+    Text1.Text = MApp.DocumentTsv.ToModuleInit1
+End Sub
+
+Private Sub mnuEditCreateSubInit2_Click()
+    Text1.Text = MApp.DocumentTsv.ToModuleInit2
+End Sub
+
+Private Sub mnuEditCreateSubInit3_Click()
+    Text1.Text = MApp.DocumentTsv.ToModuleInit3
 End Sub
 
 ' ############################## ' menu Help  ' ############################## '

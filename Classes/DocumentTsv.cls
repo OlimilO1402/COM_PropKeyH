@@ -121,21 +121,21 @@ Finally:
 End Function
 
 Public Function PropertyListsToStr() As String
-'    Dim sb As New StringBuilder
-'    Dim i As Long, pkl As List
-'    For i = 0 To m_PropertyLists.Count - 1
-'        Set pkl = m_PropertyLists.Item(i)
-'        If pkl Is Nothing Then Exit For
-'        sb.AppendLine pkl.Name
-'        Dim j As Long, pkhe As PropKeyHEntry
-'        For j = 0 To pkl.Count - 1
-'            Set pkhe = pkl.Item(j)
-'            If Not pkhe Is Nothing Then
-'                sb.AppendLine vbTab & pkhe.ToStr
-'            End If
-'        Next
-'    Next
-'    PropertyListsToStr = sb.ToStr
+    Dim sb As New StringBuilder
+    Dim i As Long, pkl As List
+    For i = 0 To m_PropertyLists.Count - 1
+        Set pkl = m_PropertyLists.Item(i)
+        If pkl Is Nothing Then Exit For
+        sb.AppendLine pkl.Name
+        Dim j As Long, pkhe As PropKeyHEntry
+        For j = 0 To pkl.Count - 1
+            Set pkhe = pkl.Item(j)
+            If Not pkhe Is Nothing Then
+                sb.AppendLine vbTab & pkhe.ToStr
+            End If
+        Next
+    Next
+    PropertyListsToStr = sb.ToStr
 End Function
 
 Public Sub ToListbox(aCmbList)
@@ -161,4 +161,110 @@ Public Sub ListOfPKHEntryToListBox(aCmbList)
     Next
     'If aCmbList.ListCount > 0 Then aCmbList.ListIndex = 0
 End Sub
+
+Private Function GetMaxNameLen() As Long
+    Dim i As Long, j As Long, m As Long
+    For i = 0 To m_PropertyLists.Count - 1
+        Dim pkl As List: Set pkl = m_PropertyLists.Item(i)
+        If Not pkl Is Nothing Then
+            For j = 0 To pkl.Count - 1
+                Dim pkhe As PropKeyHEntry: Set pkhe = pkl.Item(j)
+                If Not pkhe Is Nothing Then
+                    m = Max(m, Len(pkhe.Name_ToEnumConstname))
+                End If
+            Next
+        End If
+    Next
+    GetMaxNameLen = m
+End Function
+
+Public Function ToModuleEnum() As String
+    Dim mnl As Long: mnl = GetMaxNameLen
+    Dim sb As New StringBuilder
+    sb.AppendLine "Public Enum EPropertyKeys"
+    
+    Dim i As Long, j As Long
+    For i = 0 To m_PropertyLists.Count - 1
+        Dim pkl As List: Set pkl = m_PropertyLists.Item(i)  ' Of PropKeyHEntry
+        If Not pkl Is Nothing Then
+            sb.Append("    ' ").AppendLine pkl.Name
+            For j = 0 To pkl.Count - 1
+                Dim pkhe As PropKeyHEntry
+                Set pkhe = pkl.Item(j)
+                If Not pkhe Is Nothing Then
+                    sb.Append("    ").AppendLine pkhe.ToEnumElement(mnl)
+                End If
+            Next
+        End If
+    Next
+    sb.AppendLine "    EPropertyKeys_Max"
+    sb.AppendLine "End Enum"
+    ToModuleEnum = sb.ToStr
+End Function
+
+Public Function ToModuleInit1() As String
+    Dim sb As New StringBuilder
+    sb.AppendLine "Public Sub Init()"
+    sb.AppendLine "    ReDim m_PKeys(0 To EPropertyKeys.EPropertyKeys_Max - 1)"
+    sb.AppendLine "    Dim i As Long"
+    Dim i As Long, j As Long
+    For i = 0 To 5 'm_PropertyLists.Count - 1
+        Dim pkl As List: Set pkl = m_PropertyLists.Item(i)  ' Of PropKeyHEntry
+        If Not pkl Is Nothing Then
+            For j = 0 To pkl.Count - 1
+                Dim pkhe As PropKeyHEntry
+                Set pkhe = pkl.Item(j)
+                If Not pkhe Is Nothing Then
+                    sb.Append("    ").AppendLine pkhe.ToSubInit
+                End If
+            Next
+        End If
+    Next
+    sb.AppendLine "    ' end part1"
+    sb.AppendLine "    Init2 i"
+    sb.AppendLine "End Sub"
+    ToModuleInit1 = sb.ToStr
+End Function
+
+Public Function ToModuleInit2() As String
+    Dim sb As New StringBuilder
+    sb.AppendLine "Private Sub Init2(ByVal i As Long)"
+    Dim i As Long, j As Long
+    For i = 6 To 9 'm_PropertyLists.Count - 1
+        Dim pkl As List: Set pkl = m_PropertyLists.Item(i)  ' Of PropKeyHEntry
+        If Not pkl Is Nothing Then
+            For j = 0 To pkl.Count - 1
+                Dim pkhe As PropKeyHEntry
+                Set pkhe = pkl.Item(j)
+                If Not pkhe Is Nothing Then
+                    sb.Append("    ").AppendLine pkhe.ToSubInit
+                End If
+            Next
+        End If
+    Next
+    sb.AppendLine "    ' end part2"
+    sb.AppendLine "    Init3 i"
+    sb.AppendLine "End Sub"
+    ToModuleInit2 = sb.ToStr
+End Function
+
+Public Function ToModuleInit3() As String
+    Dim sb As New StringBuilder
+    sb.AppendLine "Private Sub Init3(ByVal i As Long)"
+    Dim i As Long, j As Long
+    For i = 10 To m_PropertyLists.Count - 1
+        Dim pkl As List: Set pkl = m_PropertyLists.Item(i)  ' Of PropKeyHEntry
+        If Not pkl Is Nothing Then
+            For j = 0 To pkl.Count - 1
+                Dim pkhe As PropKeyHEntry
+                Set pkhe = pkl.Item(j)
+                If Not pkhe Is Nothing Then
+                    sb.Append("    ").AppendLine pkhe.ToSubInit
+                End If
+            Next
+        End If
+    Next
+    sb.AppendLine "End Sub"
+    ToModuleInit3 = sb.ToStr
+End Function
 

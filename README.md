@@ -3,8 +3,8 @@
 
 [![GitHub](https://img.shields.io/github/license/OlimilO1402/COM_PropKeyH?style=plastic)](https://github.com/OlimilO1402/COM_PropKeyH/blob/master/LICENSE) 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/OlimilO1402/COM_PropKeyH?style=plastic)](https://github.com/OlimilO1402/COM_PropKeyH/releases/latest)
-[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/COM_PropKeyH/total.svg)](https://github.com/OlimilO1402/COM_PropKeyH/releases/download/v1.0.18/ReadPropKeyH_v1.0.18.zip)
-[![Follow](https://img.shields.io/github/followers/OlimilO1402.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/OlimilO1402/COM_PropKeyH/watchers)
+[![Github All Releases](https://img.shields.io/github/downloads/OlimilO1402/COM_PropKeyH/total.svg)](https://github.com/OlimilO1402/COM_PropKeyH/releases/download/v2023.2.4/ReadPropKeyH_v2023.2.4.zip)
+![GitHub followers](https://img.shields.io/github/followers/OlimilO1402?style=social)
 
 Project started in july 2022.  
 This project is for reading and parsing the file propkey.h. This file contains all propertykeys for reading file properties of different file types by implementing the IPropertyStore interface (->will come soon).  

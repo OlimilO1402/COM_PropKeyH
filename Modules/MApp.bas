@@ -3,6 +3,7 @@ Option Explicit
 Private m_DocumentTsv As DocumentTsv
 
 Sub Main()
+    MEPropertyKey.Init
     FMain.Show
 End Sub
 

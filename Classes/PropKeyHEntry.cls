@@ -63,6 +63,20 @@ Friend Function ToStr() As String
             Descript '& vbCrLf
 End Function
 
+Public Function Name_ToEnumConstname() As String
+    Name_ToEnumConstname = Replace(Me.Name, ".", "_")
+End Function
+
+Public Function ToEnumElement(ByVal MaxNameLen As Long) As String
+    'the name and maybe other infos too?
+    ToEnumElement = Name_ToEnumConstname ' MString.PadRight(Me.Name_ToEnumConstname, MaxNameLen) & " ' " & Me.FmtGuid & ", " & MString.PadRight(CStr(Me.PIDValue), 5) & " | " & Me.DataType
+End Function
+
+Public Function ToSubInit() As String
+    'm_PropKeys(i) = New_PROPERTYKEY("", 0): i = i + 1
+    'm_PKeys(i) = PKEY("{64440490-4C8B-11D1-8B70-080036B11A03}", 7): i = i + 1
+    ToSubInit = "m_PKeys(i) = NamedPKEY(""" & Me.Name & """, """ & Me.FmtGuid & """, " & Me.PIDValue & "): i = i + 1"
+End Function
 'Byte              :: VT_UI1
 'Int16             :: VT_I2
 'Int32             :: VT_I4
